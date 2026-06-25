@@ -13,13 +13,13 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="./assets/index-Ix-y4sde.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-COm2flN2.css">
+  <script type="module" crossorigin src="./assets/index-etVuVeq0.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DxP5PdCD.css">
 <link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
 <body class="theme-dark bg-slate-950 text-slate-200">
     <div id="app-container">
         <!-- Title Bar -->
-        <header class="title-bar">
+        <header id="main-header" class="title-bar sticky top-0 z-50 transition-transform duration-300">
             <div style="display: flex; align-items: center; gap: 1rem;">
                 <img src="./assets/gppp-logo-Dy10YKs9.png" alt="GPPP Logo" class="header-logo">
                 <div>
@@ -94,9 +94,12 @@
         <!-- Main Layout with Side Panel -->
         <div class="main-layout">
             <!-- Left Side: Content Creator -->
-            <div class="left-content">
-                <nav class="tabs">
-                    <div class="tab-group">
+            <div class="left-content max-[1080px]:flex-1 max-[1080px]:w-full max-[1080px]:min-w-full">
+                <nav class="tabs relative w-full flex bg-slate-950 overflow-hidden">
+                    <button id="tab-left-btn" onclick="document.querySelector('.tab-group').scrollBy({left: -150, behavior: 'smooth'})" class="z-10 hidden self-start mt-1 items-center justify-center w-8 shrink-0 bg-slate-900 hover:bg-slate-800 border border-blue-500/40 text-blue-400 hover:text-blue-300 shadow-[2px_0_5px_rgba(0,0,0,0.5)] rounded" style="height: 38px; cursor: pointer; transition: all 0.2s;">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                    </button>
+                    <div class="tab-group flex flex-1 overflow-x-auto whitespace-nowrap flex-nowrap pb-2 px-1 snap-x scroll-smooth hide-scrollbars relative z-0">
                         <button class="tab-btn active" data-target="tab-identity" tabindex="-1">Identity & Strategy</button>
                         <button class="tab-btn" data-target="tab-discovery" tabindex="-1">SEO Discovery</button>
                         <button class="tab-btn" data-target="tab-market" tabindex="-1">Market Research</button>
@@ -107,7 +110,32 @@
                         <button class="tab-btn" data-target="tab-thumb" tabindex="-1">Thumbnail</button>
                         <button class="tab-btn" data-target="tab-visual" tabindex="-1">Packaging</button>
                     </div>
+                    <button id="tab-right-btn" onclick="document.querySelector('.tab-group').scrollBy({left: 150, behavior: 'smooth'})" class="z-10 hidden self-start mt-1 items-center justify-center w-8 shrink-0 bg-slate-900 hover:bg-slate-800 border border-blue-500/40 text-blue-400 hover:text-blue-300 shadow-[-2px_0_5px_rgba(0,0,0,0.5)] rounded" style="height: 38px; cursor: pointer; transition: all 0.2s;">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                    </button>
                 </nav>
+                <script>
+                    (function() {
+                        const tabGroup = document.querySelector('.tab-group');
+                        const leftBtn = document.getElementById('tab-left-btn');
+                        const rightBtn = document.getElementById('tab-right-btn');
+                        function updateTabs() {
+                            if (!tabGroup) return;
+                            const hasOverflow = tabGroup.scrollWidth > tabGroup.clientWidth + 2;
+                            if (hasOverflow) {
+                                leftBtn.classList.remove('hidden'); leftBtn.classList.add('flex');
+                                rightBtn.classList.remove('hidden'); rightBtn.classList.add('flex');
+                            } else {
+                                leftBtn.classList.add('hidden'); leftBtn.classList.remove('flex');
+                                rightBtn.classList.add('hidden'); rightBtn.classList.remove('flex');
+                            }
+                        }
+                        window.addEventListener('resize', updateTabs);
+                        const obs = new MutationObserver(updateTabs);
+                        obs.observe(tabGroup, { childList: true, subtree: true, attributes: true });
+                        setTimeout(updateTabs, 50);
+                    })();
+                </script>
 
                 <main id="tab-content-container">
                     <!-- Content injected by JS -->
@@ -115,8 +143,8 @@
             </div>
 
             <!-- Right Side: Live Project Preview -->
-            <aside class="right-panel">
-                <div class="preview-panel">
+            <aside id="right-aside-panel" class="right-panel max-[1080px]:fixed max-[1080px]:top-0 max-[1080px]:right-0 max-[1080px]:h-full max-[1080px]:w-80 max-[1080px]:z-[100] max-[1080px]:border-l max-[1080px]:border-blue-500/30 max-[1080px]:shadow-2xl transition-transform duration-300 max-[1080px]:translate-x-full bg-slate-950">
+                <div id="mobile-blueprint-panel" class="preview-panel">
                     <div class="panel-header">
                         <h3>Technical Blueprint</h3>
                         <div class="blueprint-controls">
@@ -131,6 +159,11 @@
         </div>
 
         </div> <!-- End #app-container -->
+
+        <!-- Mobile Blueprint FAB (Hidden on desktop) -->
+        <button id="mobile-blueprint-fab" class="fixed bottom-6 right-6 z-[9999] hidden max-[1080px]:flex items-center justify-center p-3 rounded-full bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/50 transition-transform active:scale-95 touch-none">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+        </button>
 
         <!-- Core App Logic -->
         </body>
